@@ -189,4 +189,30 @@ def recommand(dataMat, user, N=3, simMeas=cosSim, estMethod=standEst):
         return 'you rated everything'
     itemScores = []
     for item in unratedItems:
+        estimatedScore = estMethod(dataMat, user, simMeas, item)
+        itemScores.append((item, estimatedScore))
+    return sorted(itemScores, key=lamda jj: jj[1], reverse=True)[:N]
 ```
+实际的数据集会是一个稀疏矩阵。利用SVD降维。
+
+基于SVD的评分估计
+```python
+def svdEst(dataMat, user, simMeas, item):
+    n = shape(dataMat)[1]
+    simTotal = 0.0; ratSimTotal = 0.0
+    U, Sigma, VT = la.svd(dataMat)
+    Sig4 = mat(eye(4)*Sigma[:4])
+    xformedItems = dataMat.T * U[:, :4] * Sig4.I
+    for j in range(n):
+        userRating = dataMat[user, j]
+        if userRating == 0 or j == item:
+            continue
+        similarity = simMeas(xformedItems[item,:].T, xformedItems[j,:].T)
+        simTotal += similarity
+        ratSimTotal += similarity * userRating
+    if simTotal == 0:
+        return 0
+    else:
+        return ratSimTotal/simTotal
+```
+    

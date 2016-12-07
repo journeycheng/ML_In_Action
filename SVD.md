@@ -116,4 +116,44 @@ matrix([[ -6.12299885e-16,   3.06149942e-16,   3.06149942e-16,
 
 ### 2.基于协同过滤的推荐引擎
 
-相似度计算
+相似度计算(参数都必须为整型)
+- 基于欧式距离
+```python
+def ecludSim(inA,inB):
+    return 1.0/(1.0 + la.norm(inA - inB))
+```
+- 基于皮尔逊系数
+```python
+def pearsSim(inA,inB):
+    if len(inA) < 3 : return 1.0
+    return 0.5+0.5*corrcoef(inA, inB, rowvar = 0)[0][1]
+```
+检查是否存在3个或更多的点。如果不存在，该函数返回1.0，这是因为此时两个向量完全相关。
+
+－ 基于余弦
+```python
+def cosSim(inA,inB):
+    num = float(inA.T*inB)
+    denom = la.norm(inA)*la.norm(inB)
+    return 0.5+0.5*(num/denom)
+```
+测试一下
+
+```python
+>>> data = mat(data)
+>>> ecluSim(data[:, 0], data[:, 4])
+0.12973190755680383
+```
+第一列与第二列数据的欧式距离相似度为0.129732
+
+```python
+>>> cosSim(data[:, 0], data[:, 4])
+0.5
+```
+余弦相似度为0.5
+
+```python
+>>> pearsSim(data[:, 0], data[:, 4])
+0.20596538173840329
+```
+基于皮尔逊系数相似度为0.205965

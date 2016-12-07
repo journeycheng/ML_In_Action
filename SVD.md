@@ -157,3 +157,36 @@ def cosSim(inA,inB):
 0.20596538173840329
 ```
 基于皮尔逊系数相似度为0.205965
+
+## 3.基于物品相似度的推荐引擎
+计算在给定相似度计算方法的条件下，用户对物品的估计评分值。参数：数据矩阵、用户编号、物品编号和相似度计算方法。
+```python
+def standEst(dataMat, user, simMeas, item):
+    n = shape(dataMat)[1]
+    simTotal = 0.0; ratSimTotal = 0.0
+    for j in range(n):
+        userRating = dataMat[user,j]
+        if userRating == 0: continue
+        # 找到任意两个用户都对j和item评分的集合
+        overLap = nonzero(logical_and(dataMat[:, item].A>0, dataMat[:, j].A>0))[0]
+        if len(overLap) == 0: 
+            similarity = 0
+        else:
+            similarity = simMeas(dataMat[overLap, item], dataMat[overLap, j])
+        simTotal += similarity
+        ratSimTotal += similarity * userRating  # 相似度
+    if simTotal == 0:
+        return 0
+    else:
+        return ratSimTotal/simTotal
+```
+用所有用户对某两个物品的评分来计算相似度。预测评分＝similarity_i\*score_i/(sum(similarity_i))
+
+```python
+def recommand(dataMat, user, N=3, simMeas=cosSim, estMethod=standEst):
+    unratedItems = nonzero(dataMat[user, :].A == 0)[1]
+    if len(unratedItems) == 0:
+        return 'you rated everything'
+    itemScores = []
+    for item in unratedItems:
+```

@@ -168,5 +168,6 @@ def handwritingClassTest():
 >>> handwritingClassTest()
 the classifier came back with: 1
 ```
-![](test1.jpg?raw=true)
-![](resize.gif?raw=ture)
+
+![原图](test1.jpg?raw=true)
+![32\*32像素](resize.gif?raw=ture)

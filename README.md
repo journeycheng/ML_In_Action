@@ -93,6 +93,9 @@ p(c_i|w) = p(w|c_i)p(c_i)/p(w).
 
 另一个常用的方法是不仅移除高频词，同时从某个预定此表中移除结构上的辅助词。该词表称为停用词表。
 
+
+[Bayes实践案例](https://github.com/journeycheng/ML_In_Action/blob/master/Bayes.md)
+
 ## 四、逻辑回归
 
 - 优点：计算代价不高，抑郁理解和实现

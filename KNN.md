@@ -1,5 +1,6 @@
 ## 手写识别系统
 
+用到的库
 ```python
 from numpy import *
 import operator
@@ -7,7 +8,7 @@ from os import listdir
 ```
 
 
-kNN算法：4个输入参数，用于分类的输入向量inX，输入的训练样本集dataSet，标签向量labels，选择最近邻的数目
+kNN算法：4个输入参数，用于分类的输入向量inX，输入的训练样本集dataSet，标签向量labels，选择最近邻的数目k。
 ```python
 def classify0(inX, dataSet,labels, k):
     dataSetSize = dataSet.shape[0]  
@@ -114,7 +115,7 @@ the classifier came back with: 1, the real answer is: 1
 ...
 the classifier came back with: 9, the real answer is: 9
 
-the total number of errors is: 12
+the total number of predicting errors is: 12
 
 the total error rate is: 0.012672
 ```
@@ -122,4 +123,4 @@ the total error rate is: 0.012672
 
 k近邻算法必须保存全部数据集，如果训练数据集很大，必须使用大量的存储空间。此外，由于必须对数据集中的每个数据计算距离，实际使用时可能非常耗时。
 
-另一个缺陷是它无法给出任何数据的基础结构信息，因此无法知晓平均实力样本和典型事例样本具有什么特征。
+另一个缺陷是它无法给出任何数据的基础结构信息，因此无法知晓平均实例样本和典型实例样本具有什么特征。

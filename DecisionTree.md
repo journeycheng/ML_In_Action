@@ -160,5 +160,19 @@ def classify(inputTree, featLabels, testVec):
 ```python
 >>> classify(myTree, labels, [1, 0])
 'no'
+```
 
-构造
+构造决策树是很耗时的任务，即使处理很小的数据集，也要花费几秒的时间，如果数据集很大，将会耗费很多计算时间。因此，为了节省计算时间，最好能够在每次执行分类时调用意境构造好的决策树。
+
+```python
+def storeTree(inputTree, filename)
+    import pickle
+    fw = open(filename, 'w')
+    pickle.dump(inputTree, fw)
+    fw.close()
+    
+def grabTree(filename):
+    import pickle
+    fr = open(filename)
+    return pickle.load(fr)
+```

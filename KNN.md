@@ -124,3 +124,47 @@ the total error rate is: 0.012672
 k近邻算法必须保存全部数据集，如果训练数据集很大，必须使用大量的存储空间。此外，由于必须对数据集中的每个数据计算距离，实际使用时可能非常耗时。
 
 另一个缺陷是它无法给出任何数据的基础结构信息，因此无法知晓平均实例样本和典型实例样本具有什么特征。
+
+
+将图片根据灰度值转换为0、1序列
+```python
+from PIL import Image
+from numpy import *
+
+def img2num(filename):
+    im = Image.open(filename)
+    im = im.resize((32, 32), Image.NEAREST)
+    im = im.convert('RGB')
+    
+    pixdata = im.load()
+    imgVect = zeros((1,1024))
+    for y in range(im.size[1]):
+        for x in range(im.size[0]):
+            Gray = (pixdata[x, y][0]*0.3 + pixdata[x, y][1]*0.59 + pixdata[x, y][2]*0.11)
+            if Gray < 150:
+                imgVect[0, 32*y+x] = 1
+    return imgVect
+```
+
+```python
+def handwritingClassTest():
+    hwLabels = []
+    trainingFileList = listdir('trainingDigits')           #load the training set
+    m = len(trainingFileList)
+    trainingMat = zeros((m,1024))
+    for i in range(1,m):
+        fileNameStr = trainingFileList[i]
+        fileStr = fileNameStr.split('.')[0]     #take off .txt
+        classNumStr = int(fileStr.split('_')[0])
+        hwLabels.append(classNumStr)
+        trainingMat[i,:] = img2vector('trainingDigits/%s' % fileNameStr)
+        
+    imgVect = img2num('test1.jpg')
+    classifierResult = classify0(imgVect, trainingMat, hwLabels, 3)
+    print "the classifier came back with: %d" % classifierResult
+```
+
+```python
+>>> handwritingClassTest()
+the classifier came back with: 1
+```

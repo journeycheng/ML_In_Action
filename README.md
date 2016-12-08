@@ -38,6 +38,8 @@ newValue = (oldValue-min)/(max-min)
 
 k决策树：k近邻算法的优化版
 
+[KNN实现例子](https://github.com/journeycheng/ML_In_Action/blob/master/KNN.md)
+
 ## 决策树
 k近邻算法可以完成很多分类任务，但是它最大的缺点就是无法给出数据的内在含义，决策树的黄祖耀优势就在于数据形式非常容易理解。
 

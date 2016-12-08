@@ -168,3 +168,5 @@ def handwritingClassTest():
 >>> handwritingClassTest()
 the classifier came back with: 1
 ```
+![](test1.jpg?raw=true)
+![](resize.gif?raw=ture)

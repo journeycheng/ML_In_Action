@@ -96,4 +96,69 @@ def chooseBestFeatureToSplit(dataSet):
 
 递归构建决策树算法
 
-得到
+得到原始数据集，然后基于最好的属性值划分数据集，由于特征值可能多于两个，因此可能存在大于两个分支的数据集划分。第一次划分之后，数据被向下传递到树分支的下一个节点，在这个节点上，可以再次划分数据。因此，可以采用递归的原则处理数据集。
+
+递归结束的条件是：程序遍历完所有划分数据集的属性，或者每个分支下的所有实例都具有相同的分类。
+
+```python 
+import operator
+def majorityCnt(calssList):
+    classCount={}
+    for vote in classList:
+        if vote not in classCount.keys():
+            classCount[vote] = 0
+        classCount[vote] += 1
+        
+    sortedClassCount = sorted(classCount.iteritems(), key=operator.itemgetter(1), reverse=True)
+    return sortedClassCount[0][0]
+```
+
+```python
+def createTree(dataSet, labels):
+    classList = [example[-1] for example in dataSet]
+    
+    if classList.count(classList[0] == len(classList)):  # 类别完全相同则停止继续划分
+        return classList[0]
+    if len(dataSet[0]) == 1:     # 遍历完所有特征时返回出现次数最多的
+        return majorityCnt(classList)
+        
+    bestFeat = chooseBestFeatureToSplit(dataSet)
+    bestFeatLabel = labels[bestFeat]
+    
+    myTree = {bestFeatLabel:{}}
+    del(labels[bestFeat])
+    
+    featValues = [example[bestFeat] for example in dataSet]
+    uniqueVals = set(featValues)
+    for value in uniqueVals:
+        subLabels = labels[:]
+        myTree[bestFeatLabel][value] = createTree(splitDataSet(dataSet, bestFeat, value), subLabels)
+    return myTree
+```
+
+```python
+>>> myTree = createTree(myDat, labels)
+>>> myTree
+{'no surfacing': {0: 'no', 1: {'flippers': {0: 'no', 1: 'yes'}}}}
+```
+
+使用决策树的分类函数
+```python
+def classify(inputTree, featLabels, testVec):
+    firstStr = inputTree.keys()[0]
+    secondDict = inputTree[firstStr]
+    featIndex = featLabels.index(firstStr)
+    for key in secondDict.keys():
+        if testVec[featIndex] == key:
+            if type(secondDict[key]).__name__ == 'dict':
+                classLabel = classify(secondDict[key], featLabels, testVec)
+            else:
+                classLabel = secondDict[key]
+    return classLabel
+```
+
+```python
+>>> classify(myTree, labels, [1, 0])
+'no'
+
+构造

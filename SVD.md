@@ -173,6 +173,7 @@ def standEst(dataMat, user, simMeas, item):
             similarity = 0
         else:
             similarity = simMeas(dataMat[overLap, item], dataMat[overLap, j])
+            print 'the %d and %d similarity is: %f' % (item, j, similarity)
         simTotal += similarity
         ratSimTotal += similarity * userRating  # 相似度
     if simTotal == 0:
@@ -193,7 +194,132 @@ def recommand(dataMat, user, N=3, simMeas=cosSim, estMethod=standEst):
         itemScores.append((item, estimatedScore))
     return sorted(itemScores, key=lamda jj: jj[1], reverse=True)[:N]
 ```
+
+测试一下，数据集
+```python
+def loadExData2():
+    return[[0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 5],
+           [0, 0, 0, 3, 0, 4, 0, 0, 0, 0, 3],
+           [0, 0, 0, 0, 4, 0, 0, 1, 0, 4, 0],
+           [3, 3, 4, 0, 0, 0, 0, 2, 2, 0, 0],
+           [5, 4, 5, 0, 0, 0, 0, 5, 5, 0, 0],
+           [0, 0, 0, 0, 5, 0, 1, 0, 0, 5, 0],
+           [4, 3, 4, 0, 0, 0, 0, 5, 5, 0, 1],
+           [0, 0, 0, 4, 0, 4, 0, 0, 0, 0, 4],
+           [0, 0, 0, 2, 0, 2, 5, 0, 0, 1, 2],
+           [0, 0, 0, 0, 5, 0, 0, 0, 0, 4, 0],
+           [1, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0]]
+           
+data = mat(loadExData2())
+```
+
+给第3个用户的推荐
+```python
+>>> recommend(data, 2)
+the 0 and 4 similarity is: 0.000000
+the 0 and 7 similarity is: 0.990916
+the 0 and 9 similarity is: 0.000000
+the 1 and 4 similarity is: 0.000000
+the 1 and 7 similarity is: 0.978429
+the 1 and 9 similarity is: 0.000000
+the 2 and 4 similarity is: 0.000000
+the 2 and 7 similarity is: 0.977652
+the 2 and 9 similarity is: 0.000000
+the 3 and 4 similarity is: 0.000000
+the 3 and 7 similarity is: 0.000000
+the 3 and 9 similarity is: 1.000000
+the 5 and 4 similarity is: 0.000000
+the 5 and 7 similarity is: 0.000000
+the 5 and 9 similarity is: 1.000000
+the 6 and 4 similarity is: 1.000000
+the 6 and 7 similarity is: 0.000000
+the 6 and 9 similarity is: 0.692308
+the 8 and 4 similarity is: 0.000000
+the 8 and 7 similarity is: 0.995750
+the 8 and 9 similarity is: 0.000000
+the 10 and 4 similarity is: 0.000000
+the 10 and 7 similarity is: 1.000000
+the 10 and 9 similarity is: 1.000000
+[(3, 4.0), (5, 4.0), (6, 4.0)]
+```
+```python
+>>> recommend(data, 2, simMeas=ecludSim)
+the 0 and 4 similarity is: 0.000000
+the 0 and 7 similarity is: 0.414214
+the 0 and 9 similarity is: 0.000000
+the 1 and 4 similarity is: 0.000000
+the 1 and 7 similarity is: 0.289898
+the 1 and 9 similarity is: 0.000000
+the 2 and 4 similarity is: 0.000000
+the 2 and 7 similarity is: 0.309017
+the 2 and 9 similarity is: 0.000000
+the 3 and 4 similarity is: 0.000000
+the 3 and 7 similarity is: 0.000000
+the 3 and 9 similarity is: 0.500000
+the 5 and 4 similarity is: 0.000000
+the 5 and 7 similarity is: 0.000000
+the 5 and 9 similarity is: 0.500000
+the 6 and 4 similarity is: 0.200000
+the 6 and 7 similarity is: 0.000000
+the 6 and 9 similarity is: 0.150221
+the 8 and 4 similarity is: 0.000000
+the 8 and 7 similarity is: 0.500000
+the 8 and 9 similarity is: 0.000000
+the 10 and 4 similarity is: 0.000000
+the 10 and 7 similarity is: 0.200000
+the 10 and 9 similarity is: 0.500000
+[(3, 4.0), (5, 4.0), (6, 4.0)]
+```
+
+```python
+>>> recommend(data, 2, simMeas=pearsSim)
+the 0 and 4 similarity is: 0.000000
+the 0 and 7 similarity is: 0.961547
+the 0 and 9 similarity is: 0.000000
+the 1 and 4 similarity is: 0.000000
+the 1 and 7 similarity is: 0.750000
+the 1 and 9 similarity is: 0.000000
+the 2 and 4 similarity is: 0.000000
+the 2 and 7 similarity is: 0.750000
+the 2 and 9 similarity is: 0.000000
+the 3 and 4 similarity is: 0.000000
+the 3 and 7 similarity is: 0.000000
+the 3 and 9 similarity is: 1.000000
+the 5 and 4 similarity is: 0.000000
+the 5 and 7 similarity is: 0.000000
+the 5 and 9 similarity is: 1.000000
+the 6 and 4 similarity is: 1.000000
+the 6 and 7 similarity is: 0.000000
+the 6 and 9 similarity is: 1.000000
+the 8 and 4 similarity is: 0.000000
+the 8 and 7 similarity is: 0.990098
+the 8 and 9 similarity is: 0.000000
+the 10 and 4 similarity is: 0.000000
+the 10 and 7 similarity is: 1.000000
+the 10 and 9 similarity is: 1.000000
+[(3, 4.0), (5, 4.0), (6, 4.0)]
+```
+基于不同相似度计算方法，推荐的菜品及相应得分竟然是一样的
+
 实际的数据集会是一个稀疏矩阵。利用SVD降维。
+
+先对data矩阵进行SVD分析
+
+```python
+>>> U, Sigma, VT = la.svd(data)
+>>> Sigma
+array([ 15.77075346,  11.40670395,  11.03044558,   4.84639758,
+         3.09292055,   2.58097379,   1.00413543,   0.72817072,
+         0.43800353,   0.22082113,   0.07367823])
+>>> SigEnergy = Sigma**2
+>>> sum(SigEnergy)
+541.9999999999992
+>>> sum(SigEnergy)*0.9
+487.79999999999927
+>>> sum(SigEnergy[:3])
+500.50028912757909
+```
+前3个元素所包含的能量高于总能量的90%
 
 基于SVD的评分估计
 ```python
@@ -201,8 +327,8 @@ def svdEst(dataMat, user, simMeas, item):
     n = shape(dataMat)[1]
     simTotal = 0.0; ratSimTotal = 0.0
     U, Sigma, VT = la.svd(dataMat)
-    Sig4 = mat(eye(4)*Sigma[:4])
-    xformedItems = dataMat.T * U[:, :4] * Sig4.I
+    Sig3 = mat(eye(3)*Sigma[:3])
+    xformedItems = dataMat.T * U[:, :4] * Sig3.I
     for j in range(n):
         userRating = dataMat[user, j]
         if userRating == 0 or j == item:
@@ -215,4 +341,61 @@ def svdEst(dataMat, user, simMeas, item):
     else:
         return ratSimTotal/simTotal
 ```
-    
+进行推荐
+```python
+>>> recommend(data, 2, estMethod=svdEst)
+the 0 and 4 similarity is: 0.487100
+the 0 and 7 similarity is: 0.996341
+the 0 and 9 similarity is: 0.490280
+the 1 and 4 similarity is: 0.485583
+the 1 and 7 similarity is: 0.995886
+the 1 and 9 similarity is: 0.490272
+the 2 and 4 similarity is: 0.485739
+the 2 and 7 similarity is: 0.995963
+the 2 and 9 similarity is: 0.490180
+the 3 and 4 similarity is: 0.450495
+the 3 and 7 similarity is: 0.482175
+the 3 and 9 similarity is: 0.522379
+the 5 and 4 similarity is: 0.506795
+the 5 and 7 similarity is: 0.494716
+the 5 and 9 similarity is: 0.496130
+the 6 and 4 similarity is: 0.434401
+the 6 and 7 similarity is: 0.479543
+the 6 and 9 similarity is: 0.583833
+the 8 and 4 similarity is: 0.490037
+the 8 and 7 similarity is: 0.997067
+the 8 and 9 similarity is: 0.490078
+the 10 and 4 similarity is: 0.512896
+the 10 and 7 similarity is: 0.524970
+the 10 and 9 similarity is: 0.493617
+[(6, 3.0394902391812892), (5, 3.0090087051508894), (3, 3.0058579857590901)]
+```
+
+```python
+>>> recommend(data, 2, simMeas=pearsSim,estMethod=svdEst)
+the 0 and 4 similarity is: 0.491930
+the 0 and 7 similarity is: 0.995589
+the 0 and 9 similarity is: 0.525351
+the 1 and 4 similarity is: 0.490161
+the 1 and 7 similarity is: 0.995215
+the 1 and 9 similarity is: 0.524614
+the 2 and 4 similarity is: 0.490351
+the 2 and 7 similarity is: 0.995258
+the 2 and 9 similarity is: 0.524687
+the 3 and 4 similarity is: 0.450126
+the 3 and 7 similarity is: 0.319482
+the 3 and 9 similarity is: 0.566918
+the 5 and 4 similarity is: 0.528504
+the 5 and 7 similarity is: 0.118324
+the 5 and 9 similarity is: 0.590049
+the 6 and 4 similarity is: 0.423669
+the 6 and 7 similarity is: 0.588901
+the 6 and 9 similarity is: 0.562042
+the 8 and 4 similarity is: 0.495434
+the 8 and 7 similarity is: 0.996232
+the 8 and 9 similarity is: 0.526835
+the 10 and 4 similarity is: 0.544647
+the 10 and 7 similarity is: 0.113370
+the 10 and 9 similarity is: 0.602380
+[(10, 3.730155458905462), (5, 3.7130085211532116), (3, 3.2828825144760154)]
+```

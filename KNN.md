@@ -126,6 +126,10 @@ k近邻算法必须保存全部数据集，如果训练数据集很大，必须�
 另一个缺陷是它无法给出任何数据的基础结构信息，因此无法知晓平均实例样本和典型实例样本具有什么特征。
 
 
+用上面的训练样本，来测试一下自己手写的数字
+- 原图
+![原图](test1.jpg?raw=true)
+
 将图片根据灰度值转换为0、1序列
 ```python
 from PIL import Image
@@ -145,7 +149,11 @@ def img2num(filename):
                 imgVect[0, 32*y+x] = 1
     return imgVect
 ```
+- 32\*32像素图
+![32\*32像素](resize.gif?raw=ture)
 
+
+进行识别
 ```python
 def handwritingClassTest():
     hwLabels = []
@@ -168,10 +176,4 @@ def handwritingClassTest():
 >>> handwritingClassTest()
 the classifier came back with: 1
 ```
-- 原图
-![原图](test1.jpg?raw=true)
 
-- 32\*32像素图
-![原图](test1.jpg?raw=true)
-![原图](test1.jpg?raw=true)
-![32\*32像素](resize.gif?raw=ture)
